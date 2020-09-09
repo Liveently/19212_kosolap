@@ -43,7 +43,7 @@ public:
       }
 
 
-      int& operator[] (const int& i) const{  
+      int& operator[] (const int& i) const{
           return mem[i];
       }
 
@@ -55,13 +55,13 @@ public:
 
 
 void read_array(){
-    FILE *f = fopen("input.txt", "r");
-    Array a(12);
-    int number = 0;
-    while (1 == fscanf(f, "%d", &number)){
+     FILE *f = fopen("input.txt", "r");
+     Array a(12);
+     int number = 0;
+     while (1 == fscanf(f, "%d", &number)){
         a.add_number_to_array(number);
-    }
-    fclose(f);
+     }
+     fclose(f);
 }
 
 
