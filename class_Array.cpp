@@ -37,9 +37,7 @@ public:
               allocated*=2;
               mem = tmp;
           }
-
           mem[++size] = number;
-
       }
 
 
@@ -47,6 +45,9 @@ public:
           return mem[i];
       }
 
+
+      
+private:
       int *mem;
       int allocated;
       int size=0;
