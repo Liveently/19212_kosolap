@@ -43,9 +43,8 @@ public:
       }
 
 
-      int from_index (int i){  // не понимаю, где нужно использовать ссылки в этой ф-ии
+      int& operator[] (const int& i) const{  
           return mem[i];
-
       }
 
       int *mem;
