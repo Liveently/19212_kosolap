@@ -23,6 +23,7 @@ public:
     }
 
     ~Value(){
+        delete this->next;
         this->next = nullptr;
     }
 };
@@ -177,9 +178,11 @@ int main() {
     int age[3], weight[3];
 
 
+    // вводим значения для первой hash_table
+
    /* for (int i = 0; i<3; i++) {
         cin >> key[i] >> age[i] >> weight[i];
-    } // вводим значения для первой hash_table*/ //для ввода вручную
+    } */ //для ввода вручную
 
 
     key[0]="Dasha"; age[0]=40; weight[0]=60;
@@ -228,7 +231,6 @@ int main() {
     cout<<list_first.contains(key[0])<<endl;
 
 
-
     cout<<list_first.size()<<" "<<list_third.size()<<"  "; // проверка swap (должно вывести "2 1  1 2")
     list_first.swap(list_third);
     cout<<list_first.size()<<" "<<list_third.size()<<endl;
@@ -256,4 +258,5 @@ int main() {
 
     return 0;
 }
+
 
