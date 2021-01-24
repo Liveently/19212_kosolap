@@ -1,3 +1,0 @@
-"C:\Program Files\JetBrains\CLion 2019.3.3\bin\cmake\win\bin\cmake.exe" -E remove -f CMakeFiles\CircularBuffer.dir/objects.a
-C:\PROGRA~2\MINGW-~1\I686-8~1.0-P\mingw32\bin\ar.exe cr CMakeFiles\CircularBuffer.dir/objects.a @CMakeFiles\CircularBuffer.dir\objects1.rsp
-C:\PROGRA~2\MINGW-~1\I686-8~1.0-P\mingw32\bin\G__~1.EXE -g   -Wl,--whole-archive CMakeFiles\CircularBuffer.dir/objects.a -Wl,--no-whole-archive  -o CircularBuffer.exe -Wl,--out-implib,libCircularBuffer.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\CircularBuffer.dir\linklibs.rsp

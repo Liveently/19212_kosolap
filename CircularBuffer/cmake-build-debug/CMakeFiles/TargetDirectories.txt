@@ -1,3 +1,0 @@
-D:/labs/CircularBuffer/cmake-build-debug/CMakeFiles/CircularBuffer.dir
-D:/labs/CircularBuffer/cmake-build-debug/CMakeFiles/edit_cache.dir
-D:/labs/CircularBuffer/cmake-build-debug/CMakeFiles/rebuild_cache.dir
