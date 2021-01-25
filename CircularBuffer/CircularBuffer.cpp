@@ -206,17 +206,14 @@ int CircularBuffer::capacity() const {
     return sz;
 }
 
-
-
-///////////////////////////////////////////////
-
-
-
-
 void CircularBuffer::set_capacity(int new_capacity) {
     linearize();
     auto buff_2 = new value_type [new_capacity]; // создать новый буффер
+
     std::copy(buffer, buffer+sz, buff_2);
+    for(int i = current; i < sz; i++){
+        buff_2[i] = '\0';
+    }
 
     delete[] buffer;
 
@@ -229,8 +226,8 @@ void CircularBuffer::resize(int new_size, const value_type &item) {
     auto buff_2 = new value_type [new_size]; // создать новый буффер
     std::copy(buffer, buffer+sz, buff_2);
 
-    for(int i=current; i< sz; i++){
-        buff_2[i]=item;
+    for(int i = current; i < sz; i++){
+        buff_2[i] = item;
     }
 
     delete[] buffer;
@@ -241,37 +238,31 @@ void CircularBuffer::resize(int new_size, const value_type &item) {
 CircularBuffer &CircularBuffer::operator=(const CircularBuffer &cb) {
 
     if (sz == cb.sz){
-        for(int i=0; i<sz; i++){
-            buffer[i]=cb.buffer[i];
+        for(int i = 0; i < sz; i++){
+            buffer[i] = cb.buffer[i];
         }
-        current=cb.current;
+        current = cb.current;
         return *this;
     }
 
     auto buff_2 = new value_type [cb.sz]; // создать новый буффер
     std::copy(cb.buffer, cb.buffer+cb.sz, buff_2);
 
-
     delete[] buffer;
 
     buffer = buff_2;
-    sz=cb.sz;
-    current=cb.current;
+    sz = cb.sz;
+    current = cb.current;
     return *this;
 }
 
 void CircularBuffer::swap(CircularBuffer &cb) {
 
-    auto buff_2 = new value_type [sz]; // создать новый буффер
+    CircularBuffer tmp; ;
 
-    for (int i = 0; i< sz; i++){
-        buff_2[i]=buffer[i];
-        buffer[i]=cb.buffer[i];
-        cb.buffer[i]=buff_2[i];
-    }
-
-
-    delete[] buff_2;
+    tmp=*this;
+    *this=cb;
+    cb=tmp;
 
 }
 
@@ -282,79 +273,82 @@ void CircularBuffer::push_back(const value_type &item) {
 
 void CircularBuffer::push_front(const value_type &item) {
 
-    int i=0;
+    int j = (current+1)%sz;
 
-    while(buffer[i]=='\0'){
-        i++;
+    while (buffer[j] == '\0'){
+        j = (current+1)%sz;
     }
-    i--;
 
-    buffer[i]=item;
+    buffer[j-1] = item;
 }
 
 void CircularBuffer::pop_back() {
-    buffer[current]='\0';
-    current=(current-1+sz)%sz;
+    buffer[current] = '\0';
+    current = (current-1+sz)%sz;
 }
 
 void CircularBuffer::pop_front() {
 
-    int i=0;
+    int j = (current+1)%sz;
 
-    while(buffer[i]=='\0'){
-        i++;
+    while (buffer[j] == '\0'){
+        j = (current+1)%sz;
     }
-    i--;
 
-    buffer[i]='\0';
+    buffer[j] = '\0';
 }
 
 void CircularBuffer::insert(int pos, const value_type &item) {
 
-    int i=0;
+    int j = (current+1)%sz;
 
-    while(buffer[i]=='\0'){
-        i++;
+    while (buffer[j] == '\0'){
+        j = (current+1)%sz; //нашли первый элемент
     }
-    i--;
 
-    i+=pos;
+    for (int k = 0; k < pos; j++){ //идём вперёд на i шагов
+        j = (current+1)%sz;
+    }
 
-    buffer[i]=item;
+    buffer[j] = item;
 
 }
 
 void CircularBuffer::erase(int first, int last) {
 
-    int i=0;
+    int j = (current+1)%sz;
 
-    while(buffer[i]=='\0'){
-        i++;
+    while (buffer[j] == '\0'){
+        j = (current+1)%sz; //нашли первый элемент
     }
-    i--;
 
-    for(int j=i+first; j<i+last; i++){
-        buffer[j]='\0';
+    for (int k = 0; k < first; j++){ //идём вперёд на i шагов
+        j = (current+1)%sz;
     }
+
+    for (int k = 0; k < last; j++){ //идём вперёд на i шагов
+        buffer[k] = '\0';
+        j = (current+1)%sz;
+    }
+
 }
 
 void CircularBuffer::clear() {
-    for(int i = 0; i<sz; i++) buffer[i]='\0';
+    for(int i = 0; i < sz; i++) buffer[i]='\0';
 }
-
 
 
 bool operator==(const CircularBuffer & a, const CircularBuffer & b){
+
     if ( (a.size() + a.reserve()) != (b.size() + b.reserve())) return false;
 
-    for(int i=0; i<(a.size() + a.reserve()); i++){
-        if (a.at(i)!=b.at(i)) return false;
+    for(int i = 0; i < (a.size() + a.reserve()); i++){
+        if (a.at(i) != b.at(i)) return false;
     }
     return true;
-    //не учитывает current
+
 }
 
 bool operator!=(const CircularBuffer & a, const CircularBuffer & b){
-    return !(a==b);
+    return !(a == b);
 }
-
