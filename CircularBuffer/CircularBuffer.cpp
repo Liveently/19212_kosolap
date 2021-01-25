@@ -258,12 +258,13 @@ CircularBuffer &CircularBuffer::operator=(const CircularBuffer &cb) {
 
 void CircularBuffer::swap(CircularBuffer &cb) {
 
-    CircularBuffer tmp; ;
+    CircularBuffer tmp;
 
     tmp=*this;
     *this=cb;
     cb=tmp;
 
+    
 }
 
 void CircularBuffer::push_back(const value_type &item) {
