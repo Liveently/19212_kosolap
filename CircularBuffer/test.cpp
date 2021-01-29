@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-//#include "CircularBuffer.h"
 #include "CircularBuffer.cpp"
 
 using testing::Eq;
@@ -118,3 +117,4 @@ TEST_F (CircularBufferTest,  test) {
     list_second.clear();
     ASSERT_EQ(list_second.size(), 0);
 }
+
