@@ -83,3 +83,4 @@ bool operator==(const CircularBuffer & a, const CircularBuffer & b);
 bool operator!=(const CircularBuffer & a, const CircularBuffer & b);
 
 #endif //CIRCULARBUFFER_CIRCULARBUFFER_H
+
