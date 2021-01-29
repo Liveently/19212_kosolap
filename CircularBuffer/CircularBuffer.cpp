@@ -42,28 +42,28 @@ value_type &CircularBuffer::operator[](int i) {
     int j = (current+1)%sz;
 
     while (buffer[j] == '\0'){
-        j = (current+1)%sz; //нашли первый элемент
+        j = (j+1)%sz; //нашли первый элемент
     }
 
-    for (int k = 0; k < i; j++){ //идём вперёд на i шагов
-        j = (current+1)%sz;
+    for (int k = 0; k < i; k++){ //идём вперёд на i шагов
+        j = (j+1)%sz;
     }
 
-    return buffer[j];
+    return buffer[j--];
 }
 
 const value_type &CircularBuffer::operator[](int i) const {
     int j = (current+1)%sz;
 
     while (buffer[j] == '\0'){
-        j = (current+1)%sz; //нашли первый элемент
+        j = (j+1)%sz; //нашли первый элемент
     }
 
-    for (int k = 0; k < i; j++){ //идём вперёд на i шагов
-        j = (current+1)%sz;
+    for (int k = 0; k < i; k++){ //идём вперёд на i шагов
+        j = (j+1)%sz;
     }
 
-    return buffer[j];
+    return buffer[j--];
 }
 
 value_type &CircularBuffer::at(int i) {
@@ -71,37 +71,37 @@ value_type &CircularBuffer::at(int i) {
     int j = (current+1)%sz;
 
     while (buffer[j] == '\0'){
-        j = (current+1)%sz; //нашли первый элемент
+        j = (j+1)%sz; //нашли первый элемент
     }
 
-    for (int k = 0; k < i; j++){ //идём вперёд на i шагов
-        j = (current+1)%sz;
+    for (int k = 0; k < i; k++){ //идём вперёд на i шагов
+        j = (j+1)%sz;
     }
 
     if ( (i < 0) || (i >= sz) || (buffer[j] == '\0') ) throw;
-    return buffer[j];
+    return buffer[j--];
 }
 
 const value_type &CircularBuffer::at(int i) const {
     int j = (current+1)%sz;
 
     while (buffer[j] == '\0'){
-        j = (current+1)%sz; //нашли первый элемент
+        j = (j+1)%sz; //нашли первый элемент
     }
 
-    for (int k = 0; k < i; j++){ //идём вперёд на i шагов
-        j = (current+1)%sz;
+    for (int k = 0; k < i; k++){ //идём вперёд на i шагов
+        j = (j+1)%sz;
     }
 
     if ( (i < 0) || (i >= sz) || (buffer[j] == '\0') ) throw;
-    return buffer[j];
+    return buffer[j--];
 }
 
 value_type &CircularBuffer::front() {
     int j = (current+1)%sz;
 
     while (buffer[j] == '\0'){
-        j = (current+1)%sz;
+        j = (j+1)%sz;
     }
 
     return buffer[j];
@@ -115,7 +115,7 @@ const value_type &CircularBuffer::front() const {
     int j = (current+1)%sz;
 
     while (buffer[j] == '\0'){
-        j = (current+1)%sz;
+        j = (j+1)%sz;
     }
 
     return buffer[j];
@@ -131,13 +131,13 @@ value_type *CircularBuffer::linearize() {
     int j = (current+1)%sz;
 
     while (buffer[j] == '\0'){
-        j = (current+1)%sz; // первый элемент
+        j = (j+1)%sz; // первый элемент
     }
 
     for(int i = 0; i < sz; i++){
         buff_2[i] = buffer[j];
-        j = (current+1)%sz;
-        if (buff_2[i]!='\0') current=i;
+        j = (j+1)%sz;
+        if (buff_2[i] != '\0') current = i;
     }
 
     std::copy(buff_2, buff_2+sz, buffer);
@@ -152,7 +152,7 @@ bool CircularBuffer::is_linearized() const {
     int j = (current+1)%sz;
 
     while (buffer[j] == '\0'){
-        j = (current+1)%sz; // первый элемент
+        j = (j+1)%sz; // первый элемент
     }
 
     return j == 0; //если первый элемент массива на 0 месте
@@ -165,14 +165,15 @@ void CircularBuffer::rotate(int new_begin) {
     int j = (current+1)%sz;
 
     while (buffer[j] == '\0'){
-        j = (current+1)%sz; // первый элемент
+        j = (j+1)%sz; // первый элемент
     }
 
-    j += new_begin;
+    j = (j+new_begin)%sz; // эл-т, с которого начинаем копировать
+
 
     for(int i = 0; i < sz; i++){
         buff_2[i] = buffer[j];
-        j = (current+1) %sz;
+        j = (j+1) %sz;
         if (buff_2[i] != '\0') current = i;
     }
 
@@ -210,10 +211,14 @@ void CircularBuffer::set_capacity(int new_capacity) {
     linearize();
     auto buff_2 = new value_type [new_capacity]; // создать новый буффер
 
+
     std::copy(buffer, buffer+sz, buff_2);
-    for(int i = current; i < sz; i++){
+
+    sz=new_capacity;
+    for(int i = current+1; i < sz; i++){
         buff_2[i] = '\0';
     }
+
 
     delete[] buffer;
 
@@ -226,7 +231,7 @@ void CircularBuffer::resize(int new_size, const value_type &item) {
     auto buff_2 = new value_type [new_size]; // создать новый буффер
     std::copy(buffer, buffer+sz, buff_2);
 
-    for(int i = current; i < sz; i++){
+    for(int i = current+1; i < sz; i++){
         buff_2[i] = item;
     }
 
@@ -264,7 +269,6 @@ void CircularBuffer::swap(CircularBuffer &cb) {
     *this=cb;
     cb=tmp;
 
-    
 }
 
 void CircularBuffer::push_back(const value_type &item) {
@@ -277,10 +281,10 @@ void CircularBuffer::push_front(const value_type &item) {
     int j = (current+1)%sz;
 
     while (buffer[j] == '\0'){
-        j = (current+1)%sz;
+        j = (j+1)%sz;
     }
 
-    buffer[j-1] = item;
+    buffer[(current+1)%sz] = item;
 }
 
 void CircularBuffer::pop_back() {
@@ -293,10 +297,11 @@ void CircularBuffer::pop_front() {
     int j = (current+1)%sz;
 
     while (buffer[j] == '\0'){
-        j = (current+1)%sz;
+        j = (j+1)%sz;
     }
 
     buffer[j] = '\0';
+
 }
 
 void CircularBuffer::insert(int pos, const value_type &item) {
@@ -320,16 +325,16 @@ void CircularBuffer::erase(int first, int last) {
     int j = (current+1)%sz;
 
     while (buffer[j] == '\0'){
-        j = (current+1)%sz; //нашли первый элемент
+        j = (j+1)%sz; //нашли первый элемент
     }
 
-    for (int k = 0; k < first; j++){ //идём вперёд на i шагов
-        j = (current+1)%sz;
+    for (int k = 0; k < first; k++){ //идём вперёд на i шагов
+        j = (j+1)%sz;
     }
 
-    for (int k = 0; k < last; j++){ //идём вперёд на i шагов
-        buffer[k] = '\0';
-        j = (current+1)%sz;
+    for (int k = 0; k < last-1; k++){ //идём вперёд на i шагов
+        buffer[j] = '\0';
+        j = (j+1)%sz;
     }
 
 }
@@ -353,3 +358,4 @@ bool operator==(const CircularBuffer & a, const CircularBuffer & b){
 bool operator!=(const CircularBuffer & a, const CircularBuffer & b){
     return !(a == b);
 }
+
