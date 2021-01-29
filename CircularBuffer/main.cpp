@@ -1,8 +1,16 @@
 #include <iostream>
-#include "CircularBuffer.h"
-#include "CircularBuffer.cpp"
+#include <gtest/gtest.h>
+#include "test.cpp"
+
+using namespace std;
+
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+
+    testing::InitGoogleTest();
+    RUN_ALL_TESTS();
+
+
+    cout<<"end";
     return 0;
 }
