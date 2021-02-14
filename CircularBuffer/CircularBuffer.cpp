@@ -209,6 +209,7 @@ int CircularBuffer::capacity() const {
 
 void CircularBuffer::set_capacity(int new_capacity) {
     linearize();
+    if (new_capacity<current) throw;
     auto buff_2 = new value_type [new_capacity]; // создать новый буффер
 
 
@@ -227,7 +228,11 @@ void CircularBuffer::set_capacity(int new_capacity) {
 
 void CircularBuffer::resize(int new_size, const value_type &item) {
 
+
     linearize();
+
+    if (new_size<current) throw;
+
     auto buff_2 = new value_type [new_size]; // создать новый буффер
     std::copy(buffer, buffer+sz, buff_2);
 
@@ -346,9 +351,9 @@ void CircularBuffer::clear() {
 
 bool operator==(const CircularBuffer & a, const CircularBuffer & b){
 
-    if ( (a.size() + a.reserve()) != (b.size() + b.reserve())) return false;
+    if ( a.sz != b.sz) return false;
 
-    for(int i = 0; i < (a.size() + a.reserve()); i++){
+    for(int i = 0; i < a.sz ; i++){
         if (a.at(i) != b.at(i)) return false;
     }
     return true;
@@ -358,4 +363,5 @@ bool operator==(const CircularBuffer & a, const CircularBuffer & b){
 bool operator!=(const CircularBuffer & a, const CircularBuffer & b){
     return !(a == b);
 }
+
 
