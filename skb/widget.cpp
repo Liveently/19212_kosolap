@@ -1,11 +1,7 @@
-
 #include "widget.h"
 #include "ui_widget.h"
-#include "mymap.h"
-#include <QPixmap>
 #include <QPaintEvent>
 #include <QPainter>
-#include <QDebug>
 
 
 
@@ -22,7 +18,7 @@ Widget::Widget(QWidget *parent)
     empty.load("C:/Users/Luna/Desktop/lab2/pic/5.jpg");
     goal.load("C:/Users/Luna/Desktop/lab2/pic/6.jpg");
 
-    ui->stackedWidget->setCurrentWidget(ui->page_welcomr);
+    ui->stackedWidget->setCurrentWidget(ui->page_hello);
     update();
 }
 
@@ -33,12 +29,6 @@ Widget::~Widget()
 
 void Widget::paintEvent(QPaintEvent *)
 {
-    if(game_page==1) //страница меню
-    {
-        QPainter p;
-        p.begin(this);
-        p.end();
-    }
     if(game_page==2) //страница уровня
     {
 
@@ -65,153 +55,144 @@ void Widget::paintEvent(QPaintEvent *)
 
 void Widget::keyPressEvent(QKeyEvent *event)
 {
-    if(event->key()!=Qt::Key_A&&event->key()!=Qt::Key_S&&event->key()!=Qt::Key_D&&event->key()!=Qt::Key_W)
-        return;
-    int mykey = event->key();
-    KeyManipuation(mykey);
-} // нажатие кнопки
 
-void Widget::KeyManipuation(int UserKey) //ход
-{
-    if(game_page==1)
-        return;
-    int i=0,j=0;
+   int my_key = event->key();
 
-   for (i = 0; i < 10; ++i) //положение игрока
+   int i=0,j=0;
+
+   for (i=0; i<10; ++i) //положение игрока
     {
-        for (j = 0; j < 10; ++j)
-        {
-            if (map[i][j] == 1) break;
-        }
-        if (map[i][j] == 1 ) break;
+        for (j=0; j<10;++j)
+            if (map[i][j]==1) break;
+
+        if (map[i][j]==1) break;
     }
 
-
-    switch(UserKey)
+    switch(my_key)
     {
     case Qt::Key_W:
-        if (map[i][j - 1] == 5)
+        if (map[i][j-1]==5)
         {
-            map[i][j] = 5;
-            map[i][j - 1] = 1;
+            map[i][j]=5;
+            map[i][j-1]=1;
         } // если идём вперёд и впереди пустое место
-        else if (map[i][j - 1] == 3 && map[i][j - 2] == 5)
+        else if (map[i][j-1]==3 && map[i][j-2]==5)
         {
-            map[i][j] = 5;
-            map[i][j - 1] = 1;
-            map[i][j - 2] = 3;
+            map[i][j]=5;
+            map[i][j-1]=1;
+            map[i][j-2]=3;
         } // если впереди мяч, а за ним пусто
-        else if (map[i][j - 1] == 3 && map[i][j - 2] == 4)
+        else if (map[i][j-1]==3 && map[i][j-2]==4)
         {
-            map[i][j] = 5;
-            map[i][j - 1] = 1;
-            map[i][j - 2] = 6;
+            map[i][j]=5;
+            map[i][j-1]=1;
+            map[i][j-2]=6;
         }// если впереди мяч, а за ним корзина
         break;
     case Qt::Key_S:
-        if (map[i][j + 1] == 5)
+        if (map[i][j+1]==5)
         {
-            map[i][j] = 5;
-            map[i][j + 1] = 1;
+            map[i][j]=5;
+            map[i][j+1]=1;
         }
-        else if (map[i][j + 1] == 3 && map[i][j + 2] == 5)
+        else if (map[i][j+1]==3 && map[i][j+2]==5)
         {
             map[i][j] = 5;
-            map[i][j + 1] = 1;
-            map[i][j + 2] = 3;
+            map[i][j+1]=1;
+            map[i][j+2]=3;
         }
-        else if (map[i][j + 1] == 3 && map[i][j + 2] == 4)
+        else if (map[i][j+1]==3 && map[i][j+2]==4)
         {
-            map[i][j] = 5;
-            map[i][j + 1] = 1;
-            map[i][j + 2] = 6;
+            map[i][j]=5;
+            map[i][j+1]=1;
+            map[i][j+2]=6;
         }
         break;
     case Qt::Key_D:
-        if (map[i + 1][j] == 5)
+        if (map[i+1][j]==5)
         {
-            map[i][j] = 5;
-            map[i + 1][j] = 1;
+            map[i][j]=5;
+            map[i+1][j]=1;
         }
-        else if (map[i + 1][j] == 3 && map[i + 2][j] == 5)
+        else if (map[i+1][j]==3 && map[i+2][j]==5)
         {
-            map[i][j] = 5;
-            map[i + 1][j] = 1;
-            map[i + 2][j] = 3;
+            map[i][j]=5;
+            map[i+1][j]=1;
+            map[i+2][j]=3;
         }
-        else if (map[i + 1][j] == 3 && map[i + 2][j] == 4)
+        else if (map[i+1][j]==3 && map[i+2][j]==4)
         {
-            map[i][j] = 5;
-            map[i + 1][j] = 1;
-            map[i + 2][j] = 6;
+            map[i][j]=5;
+            map[i+1][j]=1;
+            map[i+2][j]=6;
         }
         break;
     case Qt::Key_A:
-        if (map[i - 1][j] == 5)
+        if (map[i-1][j]==5)
         {
-            map[i][j] = 5;
-            map[i - 1][j] = 1;
+            map[i][j]=5;
+            map[i-1][j]=1;
         }
-        else if (map[i - 1][j] == 3 && map[i - 2][j] == 5)
+        else if (map[i-1][j]==3 && map[i-2][j]==5)
         {
-            map[i][j] = 5;
-            map[i - 1][j] = 1;
-            map[i - 2][j] = 3;
+            map[i][j]=5;
+            map[i-1][j]=1;
+            map[i-2][j]=3;
         }
-        else if (map[i - 1][j] == 3 && map[i - 2][j] == 4)
+        else if (map[i-1][j]==3 && map[i-2][j]==4)
         {
-            map[i][j] = 5;
-            map[i - 1][j] = 1;
-            map[i - 2][j] = 6;
+            map[i][j]=5;
+            map[i-1][j]=1;
+            map[i-2][j]=6;
         }
         break;
-
     }
 
     update();
-    if(GameOver())
-        Winning();
+    next_move();
+
 }
 
-bool Widget::GameOver()
+void Widget::next_move()
 {
     for(int i=0;i<10;++i)
         for(int j=0;j<10;++j)
-            if(map[i][j]==3)
-                return false;
-    return true;
-} //конец игры, если на поле нет мячей
+            if (map[i][j]==4) return; // если есть пустые корзины, то продолжаем игру
 
-void Widget::Winning()
-{
-    ui->stackedWidget->setCurrentWidget(ui->page_welcomr);
+    ui->stackedWidget->setCurrentWidget(ui->page_hello); //при победе загружается меню
     game_page=1;
-} //при победе загружается меню
+}
 
+void Widget::on_restart_clicked()
+{
+    for(int i=0;i<10;++i)
+        for(int j=0;j<10;++j)
+              map[i][j] = MyMap[no_map-1][i][j];
 
-void Widget::on_pdb_start_clicked()
+    update();
+}
+
+void Widget::on_menu_clicked()
+{
+    ui->stackedWidget->setCurrentWidget(ui->page_hello);
+    game_page=1;
+}
+
+void Widget::on_start_clicked()
 {
     ui->stackedWidget->setCurrentWidget(ui->page_game);
     game_page = 2;
 
     QString str = ui->comboBox->currentText();
-    int m = str.toInt();
-    loadmap(m);
-} //кнопка старта
+    no_map = str.toInt();
 
-
-void Widget::on_pdb_exit_clicked()
-{
-    close();
-} // кнопка выход
-
-
-void Widget::loadmap(int m)
-{
-    MyMap mp;
-    if(m>3)
-        return;
     for(int i=0;i<10;++i)
         for(int j=0;j<10;++j)
-            map[i][j] = mp.THEmap[m-1][i][j];
-} //загружаем карту
+            map[i][j] = MyMap[no_map-1][i][j];
+}
+
+void Widget::on_exit_clicked()
+{
+        close();
+}
+
