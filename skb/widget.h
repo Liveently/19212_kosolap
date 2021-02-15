@@ -2,8 +2,6 @@
 #define WIDGET_H
 
 #include <QWidget>
-#include "mymap.h"
-
 
 
 QT_BEGIN_NAMESPACE
@@ -22,15 +20,14 @@ public:
     ~Widget();
     void paintEvent(QPaintEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
-    void KeyManipuation(int UserKey);
-    void loadmap(int m);
-    bool GameOver();
-    void Winning();
+    void next_move();
 
 private slots:
-    void on_pdb_start_clicked();
 
-    void on_pdb_exit_clicked();
+    void on_restart_clicked();
+    void on_menu_clicked();
+    void on_start_clicked();
+    void on_exit_clicked();
 
 private:
     Ui::Widget *ui;
@@ -41,5 +38,45 @@ private:
     QPixmap empty;
     QPixmap goal;
     int game_page = 1;
+    int no_map;
+
+    int MyMap[3][10][10]  //1 игрок;2 стена;3 мяч;4 корзина;5 пусто; 
+    {
+           {{2,2,2,2,2,2,2,2,2,2},
+            {2,4,5,5,5,5,5,5,4,2},
+            {2,2,2,2,5,5,2,2,2,2},
+            {2,5,5,5,5,5,5,5,5,2},
+            {2,5,3,5,5,5,5,3,5,2},
+            {2,5,3,5,1,5,5,3,5,2},
+            {2,5,5,5,5,5,5,5,5,2},
+            {2,2,2,2,5,5,2,2,2,2},
+            {2,4,5,5,5,5,5,5,4,2},
+            {2,2,2,2,2,2,2,2,2,2}},// map 1
+
+        
+           {{2,2,2,2,2,2,2,2,2,2},
+            {2,5,5,2,5,5,5,5,4,2},
+            {2,5,3,2,3,2,2,5,5,2},
+            {2,5,5,5,5,5,5,5,5,2},
+            {2,2,5,2,5,5,5,2,5,2},
+            {2,5,5,1,5,5,3,5,5,2},
+            {2,5,5,2,2,5,5,2,4,2},
+            {2,5,5,5,2,5,2,2,5,2},
+            {2,4,5,5,5,5,5,5,5,2},
+            {2,2,2,2,2,2,2,2,2,2}},// map 2
+
+        
+           {{2,2,2,2,2,2,2,2,2,2},
+            {2,5,5,5,5,5,4,5,5,2},
+            {2,5,5,5,5,2,2,4,5,2},
+            {2,2,2,5,5,2,4,5,5,2},
+            {2,4,2,3,3,2,5,5,5,2},
+            {2,5,3,5,1,3,5,5,5,2},
+            {2,5,2,3,3,2,5,5,2,2},
+            {2,5,5,5,5,5,5,5,4,2},
+            {2,4,5,5,5,5,5,2,2,2},
+            {2,2,2,2,2,2,2,2,2,2}}//map 3     
+    };
 };
+
 #endif // WIDGET_H
