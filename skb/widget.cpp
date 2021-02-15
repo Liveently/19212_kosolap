@@ -4,7 +4,6 @@
 #include <QPainter>
 
 
-
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Widget)
@@ -29,26 +28,24 @@ Widget::~Widget()
 
 void Widget::paintEvent(QPaintEvent *)
 {
-    if(game_page==2) //страница уровня
-    {
+    if(game_page==1) return;
 
-        for(int i=0;i<600;++i)
+    for(int i=0;i<600;++i)
+    {
+        for(int j=0;j<600;++j)
         {
-            for(int j=0;j<600;++j)
+             QPainter p;
+             p.begin(this);
+             switch (map[i][j])
              {
-                QPainter p;
-                p.begin(this);
-                switch (map[i][j])
-                {
                 case 1: p.drawPixmap(i*60,j*60,60,60,player); break;
                 case 2: p.drawPixmap(i*60,j*60,60,60,wall); break;
                 case 3: p.drawPixmap(i*60,j*60,60,60,ball); break;
                 case 4: p.drawPixmap(i*60,j*60,60,60,basket); break;
                 case 5: p.drawPixmap(i*60,j*60,60,60,empty); break;
                 case 6: p.drawPixmap(i*60,j*60,60,60,goal); break;
-                }
-                p.end();
-            }
+              }
+              p.end();
         }
     }
 }
@@ -150,7 +147,6 @@ void Widget::keyPressEvent(QKeyEvent *event)
 
     update();
     next_move();
-
 }
 
 void Widget::next_move()
@@ -195,4 +191,5 @@ void Widget::on_exit_clicked()
 {
         close();
 }
+
 
