@@ -10,11 +10,9 @@ CONFIG += c++11
 
 SOURCES += \
     main.cpp \
-    mymap.cpp \
     widget.cpp
 
 HEADERS += \
-    mymap.h \
     widget.h
 
 FORMS += \
