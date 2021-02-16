@@ -2,6 +2,8 @@
 #include "ui_widget.h"
 #include <QPaintEvent>
 #include <QPainter>
+#include <QFileDialog>
+#include <QTextStream>
 
 
 Widget::Widget(QWidget *parent)
@@ -18,7 +20,6 @@ Widget::Widget(QWidget *parent)
     goal.load("C:/Users/Luna/Desktop/lab2/pic/6.jpg");
 
     ui->stackedWidget->setCurrentWidget(ui->page_hello);
-    update();
 }
 
 Widget::~Widget()
@@ -45,7 +46,7 @@ void Widget::paintEvent(QPaintEvent *)
                 case 5: p.drawPixmap(i*60,j*60,60,60,empty); break;
                 case 6: p.drawPixmap(i*60,j*60,60,60,goal); break;
               }
-              p.end();
+             p.end();
         }
     }
 }
@@ -192,4 +193,46 @@ void Widget::on_exit_clicked()
         close();
 }
 
+
+void Widget::on_load_clicked()
+{
+    count++;
+
+    QString name = QString::number(count);
+
+
+
+    ui->comboBox->addItem(name, count-1);
+
+
+    QString filename = QFileDialog :: getOpenFileName( this, "title", "text", "Text Files(*.txt)");
+
+
+    QFile file(filename);
+
+    if (!file.open(QIODevice::ReadOnly)){
+        //return Error();
+    }
+
+    QTextStream in(&file);
+
+    QString str=in.readAll();
+
+    file.close();
+
+
+
+    int k=0;
+
+    for(int i=0;i<10;++i)
+        for(int j=0;j<10;++j){
+            if (str[k]=='1') MyMap[count-1][i][j]=1;
+            if (str[k]=='2') MyMap[count-1][i][j]=2;
+            if (str[k]=='3') MyMap[count-1][i][j]=3;
+            if (str[k]=='4') MyMap[count-1][i][j]=4;
+            if (str[k]=='5') MyMap[count-1][i][j]=5;
+            k++;
+        }
+
+}
 
