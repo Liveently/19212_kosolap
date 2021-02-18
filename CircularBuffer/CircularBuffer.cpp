@@ -78,7 +78,7 @@ value_type &CircularBuffer::at(int i) {
         j = (j+1)%sz;
     }
 
-    if ( (i < 0) || (i >= sz) || (buffer[j] == '\0') ) throw;
+    if ( (i < 0) || (i >= sz) || (buffer[j] == '\0') ) throw std::out_of_range{"There is no item with this index in the buffer"};
     return buffer[j--];
 }
 
@@ -93,7 +93,7 @@ const value_type &CircularBuffer::at(int i) const {
         j = (j+1)%sz;
     }
 
-    if ( (i < 0) || (i >= sz) || (buffer[j] == '\0') ) throw;
+    if ( (i < 0) || (i >= sz) || (buffer[j] == '\0') ) throw std::out_of_range{"There is no item with this index in the buffer"};
     return buffer[j--];
 }
 
@@ -209,9 +209,9 @@ int CircularBuffer::capacity() const {
 
 void CircularBuffer::set_capacity(int new_capacity) {
     linearize();
-    if (new_capacity<current) throw;
-    auto buff_2 = new value_type [new_capacity]; // создать новый буффер
+    if (new_capacity < current) throw std::length_error{"New buffer size is too small"};
 
+    auto buff_2 = new value_type [new_capacity]; // создать новый буффер
 
     std::copy(buffer, buffer+sz, buff_2);
 
@@ -220,7 +220,6 @@ void CircularBuffer::set_capacity(int new_capacity) {
         buff_2[i] = '\0';
     }
 
-
     delete[] buffer;
 
     buffer = buff_2;
@@ -228,10 +227,9 @@ void CircularBuffer::set_capacity(int new_capacity) {
 
 void CircularBuffer::resize(int new_size, const value_type &item) {
 
-
     linearize();
 
-    if (new_size<current) throw;
+    if (new_size<current) throw std::length_error{"New buffer size is too small"};
 
     auto buff_2 = new value_type [new_size]; // создать новый буффер
     std::copy(buffer, buffer+sz, buff_2);
