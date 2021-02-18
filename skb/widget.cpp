@@ -4,6 +4,7 @@
 #include <QPainter>
 #include <QFileDialog>
 #include <QTextStream>
+#include <QErrorMessage>
 
 
 Widget::Widget(QWidget *parent)
@@ -196,43 +197,71 @@ void Widget::on_exit_clicked()
 
 void Widget::on_load_clicked()
 {
-    count++;
 
-    QString name = QString::number(count);
+    QString filename = QFileDialog :: getOpenFileName( this, "Add map", "C:/Users/Luna/Desktop", "Text Files(*.txt)");
 
-
-
-    ui->comboBox->addItem(name, count-1);
-
-
-    QString filename = QFileDialog :: getOpenFileName( this, "title", "text", "Text Files(*.txt)");
-
+    if(filename.length()<1){
+        (new QErrorMessage(this))->showMessage("Ошибка загрузки карты");
+        return;
+    }
 
     QFile file(filename);
 
     if (!file.open(QIODevice::ReadOnly)){
-        //return Error();
+        (new QErrorMessage(this))->showMessage("Ошибка загрузки карты");
+        return;
     }
 
-    QTextStream in(&file);
+    QTextStream stream(&file);
 
-    QString str=in.readAll();
+    QString str=stream.readAll();
 
     file.close();
 
 
+    if(str.length()!=100){
+        (new QErrorMessage(this))->showMessage("Это не карта! Карта должна быть 10*10");
+        return;
+    }
+
 
     int k=0;
+    int count1=0;
+    int count_ball=0;
 
     for(int i=0;i<10;++i)
         for(int j=0;j<10;++j){
-            if (str[k]=='1') MyMap[count-1][i][j]=1;
-            if (str[k]=='2') MyMap[count-1][i][j]=2;
-            if (str[k]=='3') MyMap[count-1][i][j]=3;
-            if (str[k]=='4') MyMap[count-1][i][j]=4;
-            if (str[k]=='5') MyMap[count-1][i][j]=5;
+            if (str[k]=='1')
+            {
+                MyMap[count][i][j]=1;
+                count1++;
+            }
+            else if (str[k]=='2') MyMap[count][i][j]=2;
+            else if (str[k]=='3')
+            {
+                MyMap[count][i][j]=3;
+                count_ball++;
+            }
+            else if (str[k]=='4')
+            {
+                MyMap[count][i][j]=4;
+                count_ball--;
+            }
+            else if (str[k]=='5') MyMap[count][i][j]=5;
+            else {
+                (new QErrorMessage(this))->showMessage("Это не карта! Содержится неизвестный символ");
+                return;
+            }
             k++;
         }
 
+    if(count1!=1 || count_ball!=0){
+        (new QErrorMessage(this))->showMessage("Некорректная карта! Должен быть 1 игрок и одинаковое колличество мячей и корзин");
+        return;
+    }
+
+    count++;
+    QString name = QString::number(count);
+    ui->comboBox->addItem(name, count-1);
 }
 
