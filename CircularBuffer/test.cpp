@@ -21,7 +21,20 @@ TEST_F (CircularBufferTest,  test) {
     list_first.push_back(1);
     list_first.push_back(2);
     list_first.push_back(3);
+    
+    try {
+        list_first.at(-1);
+    }
+    catch (std::out_of_range& e){
+        ASSERT_STREQ(e.what(), "There is no item with this index in the buffer");
+    }
 
+    try {
+        list_first.at(9);
+    }
+    catch (std::out_of_range& e){
+        ASSERT_STREQ(e.what(), "There is no item with this index in the buffer");
+    }
 
     ASSERT_EQ(list_first.front(), 1);
     ASSERT_EQ(list_first.size(), 3);
@@ -85,8 +98,7 @@ TEST_F (CircularBufferTest,  test) {
     list_second.resize(15, 2);
     ASSERT_EQ(list_second.size(), 8);
 
-
-
+    
     list_first=list_second;
     ASSERT_EQ(list_first.size(), 8);
     ASSERT_EQ(list_first.at(0), 2);
@@ -101,9 +113,7 @@ TEST_F (CircularBufferTest,  test) {
 
     list_second.rotate(5);
     ASSERT_EQ(list_second.at(0), 10);
-
-
-
+    
 
     list_first.swap(list_second);
     ASSERT_EQ(list_first.at(0), 10);
@@ -113,6 +123,20 @@ TEST_F (CircularBufferTest,  test) {
     ASSERT_EQ(list_first.size(), 10);
     ASSERT_EQ(list_second.size(), 8);
 
+
+   try {
+       list_second.set_capacity(1);
+   }
+   catch (std::length_error& e){
+       ASSERT_STREQ(e.what(), "New buffer size is too small");
+   }
+
+    try {
+        list_second.resize(1, 12);
+    }
+    catch (std::length_error& e){
+        ASSERT_STREQ(e.what(), "New buffer size is too small");
+    }
 
     list_second.clear();
     ASSERT_EQ(list_second.size(), 0);
